@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation Backend — Système de Vote AG</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            color: #1a1a2e;
+            background: #fff;
+            line-height: 1.6;
+        }
+
+        .cover {
+            page-break-after: always;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .cover-badge {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            margin-bottom: 32px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .cover h2 {
+            font-size: 20px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            opacity: 0.7;
+        }
+
+        .cover-divider {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            border-radius: 2px;
+            margin: 0 auto 40px;
+        }
+
+        .cover-tech {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+
+        .section-break {
+            page-break-before: always;
+        }
+
+        h1.section-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #1a1a2e;
+            border-left: 5px solid #f59e0b;
+            padding-left: 16px;
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+
+        h2.sub-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #1e3a5f;
+            margin-bottom: 12px;
+            margin-top: 24px;
+        }
+
+        h3.item-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #d97706;
+            margin-bottom: 6px;
+            margin-top: 16px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #fff7ed, #fef3c7);
+            border: 1.5px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        .intro-box p {
+            color: #92400e;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 12px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        code {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 16px 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            margin: 14px 0;
+            line-height: 1.6;
+            border-left: 4px solid #f59e0b;
+        }
+
+        pre .keyword {
+            color: #c792ea;
+        }
+
+        pre .string {
+            color: #c3e88d;
+        }
+
+        pre .comment {
+            color: #546e7a;
+            font-style: italic;
+        }
+
+        pre .fn {
+            color: #82aaff;
+        }
+
+        pre .annot {
+            color: #f59e0b;
+        }
+
+        pre .type {
+            color: #4ec9b0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 14px 0;
+        }
+
+        .card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px 16px;
+            background: #fff;
+            page-break-inside: avoid;
+        }
+
+        .card-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-weight: 800;
+            font-size: 13px;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 11.5px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-right: 4px;
+        }
+
+        .badge-green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-orange {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .flow {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 14px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .flow-arrow {
+            color: #9ca3af;
+            font-size: 16px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 12px;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 12px;
+            color: #1e40af;
+        }
+
+        .toc {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 36px;
+        }
+
+        .toc h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #1a1a2e;
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted #e2e8f0;
+            font-size: 12px;
+        }
+
+        .toc-item:last-child {
+            border: none;
+        }
+
+        .toc-num {
+            color: #d97706;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        hr.divider {
+            border: none;
+            border-top: 2px solid #e5e7eb;
+            margin: 32px 0;
+        }
+
+        .tree {
+            font-family: 'Courier New', monospace;
+            font-size: 11.5px;
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            line-height: 2;
+        }
+
+        .tree .folder {
+            color: #d97706;
+            font-weight: 700;
+        }
+
+        .tree .file {
+            color: #374151;
+        }
+
+        .arch-layer {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .arch-label {
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 140px;
+        }
+
+        .arch-desc {
+            font-size: 11.5px;
+            color: #6b7280;
+        }
+
+        @media print {
+            h1.section-title {
+                page-break-before: always;
+            }
+
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE DE GARDE -->
+    <div class="cover">
+        <div class="cover-badge">Documentation Technique</div>
+        <h1>☕ Backend Spring Boot</h1>
+        <h2>Système de Vote — Assemblées Générales</h2>
+        <div class="cover-divider"></div>
+        <div style="font-size:14px;opacity:0.6;line-height:2;">
+            <p>API REST sécurisée avec authentification JWT</p>
+            <p>Gestion complète des entreprises, actionnaires, résolutions et votes</p>
+        </div>
+        <div class="cover-tech">
+            <span class="tech-badge">☕ Java 17</span>
+            <span class="tech-badge">🍃 Spring Boot 3.2</span>
+            <span class="tech-badge">🔐 Spring Security</span>
+            <span class="tech-badge">🗄️ JPA / Hibernate</span>
+            <span class="tech-badge">🐬 MySQL</span>
+            <span class="tech-badge">🔑 JWT (jjwt 0.12)</span>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- TABLE DES MATIÈRES -->
+        <div class="toc">
+            <h2>📋 Table des matières</h2>
+            <div class="toc-item"><span><span class="toc-num">1.</span> Présentation générale</span><span>2</span></div>
+            <div class="toc-item"><span><span class="toc-num">2.</span> Architecture en couches</span><span>2</span>
+            </div>
+            <div class="toc-item"><span><span class="toc-num">3.</span> Structure du projet</span><span>3</span></div>
+            <div class="toc-item"><span><span class="toc-num">4.</span> Modèle de données (Entités
+                    JPA)</span><span>4</span></div>
+            <div class="toc-item"><span><span class="toc-num">5.</span> Couche Sécurité (JWT + Spring
+                    Security)</span><span>6</span></div>
+            <div class="toc-item"><span><span class="toc-num">6.</span> Couche Contrôleurs (API
+                    REST)</span><span>7</span></div>
+            <div class="toc-item"><span><span class="toc-num">7.</span> Couche Services (Logique
+                    métier)</span><span>9</span></div>
+            <div class="toc-item"><span><span class="toc-num">8.</span> Couche Repository (JPA)</span><span>10</span>
+            </div>
+            <div class="toc-item"><span><span class="toc-num">9.</span> DTOs (Data Transfer
+                    Objects)</span><span>10</span></div>
+            <div class="toc-item"><span><span class="toc-num">10.</span> Configuration (CORS,
+                    DataInitializer)</span><span>11</span></div>
+            <div class="toc-item"><span><span class="toc-num">11.</span> Flux complets</span><span>11</span></div>
+        </div>
+
+        <!-- ===================== 1. PRÉSENTATION ===================== -->
+        <h1 class="section-title">1. Présentation générale</h1>
+        <div class="intro-box">
+            <p>
+                Le backend est une <strong>API REST Spring Boot 3.2</strong> sécurisée avec <strong>JSON Web Tokens
+                    (JWT)</strong>.
+                Il expose des endpoints pour deux types d'acteurs :<br><br>
+                • <strong>Administrateur</strong> : CRUD complet sur Entreprises, Actionnaires, Résolutions, Assemblées
+                Générales<br>
+                • <strong>Actionnaire (USER)</strong> : consultation de ses AGs et expression de votes (POUR / CONTRE /
+                NEUTRE)<br><br>
+                La base de données utilisée est <strong>MySQL</strong>, gérée via <strong>Spring Data JPA /
+                    Hibernate</strong> avec création automatique des tables
+                (<code>spring.jpa.hibernate.ddl-auto=update</code>).
+            </p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">🏗️</div>
+                <div class="card-title">Architecture 3 couches</div>
+                <div class="card-desc">Controller → Service → Repository. Séparation claire des responsabilités.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔐</div>
+                <div class="card-title">Sécurité JWT</div>
+                <div class="card-desc">Authentification stateless. Token signé HMAC-SHA256, validité 24h. Rôles ADMIN /
+                    USER via Spring Security.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🗄️</div>
+                <div class="card-title">6 entités JPA</div>
+                <div class="card-desc">User, Entreprise, Actionnaire, Resolution, AssembleeGenerale, Vote — avec
+                    relations ManyToOne et ManyToMany.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📦</div>
+                <div class="card-title">Pattern DTO</div>
+                <div class="card-desc">8 DTOs pour ne jamais exposer les entités JPA directement. Contrôle fin des
+                    données envoyées au client.</div>
+            </div>
+        </div>
+
+        <!-- ===================== 2. ARCHITECTURE ===================== -->
+        <h1 class="section-title">2. Architecture en couches</h1>
+
+        <div class="arch-layer" style="border-color:#4ade80; background:#f0fdf4;">
+            <div class="arch-label" style="color:#15803d;">🌐 Couche Client</div>
+            <div class="arch-desc">Frontend React — envoie des requêtes HTTP avec header
+                <code>Authorization: Bearer {JWT}</code></div>
+        </div>
+        <div style="text-align:center;color:#9ca3af;font-size:18px;">↕</div>
+        <div class="arch-layer" style="border-color:#60a5fa; background:#eff6ff;">
+            <div class="arch-label" style="color:#1d4ed8;">🎮 Controller</div>
+            <div class="arch-desc">Reçoit les requêtes HTTP, valide le JWT, délègue au Service. Retourne les DTO en
+                JSON.</div>
+        </div>
+        <div style="text-align:center;color:#9ca3af;font-size:18px;">↕</div>
+        <div class="arch-layer" style="border-color:#f59e0b; background:#fff7ed;">
+            <div class="arch-label" style="color:#d97706;">⚙️ Service</div>
+            <div class="arch-desc">Logique métier. Convertit Entity ↔ DTO. Gère les transactions. Appelle les
+                Repository.</div>
+        </div>
+        <div style="text-align:center;color:#9ca3af;font-size:18px;">↕</div>
+        <div class="arch-layer" style="border-color:#a78bfa; background:#f5f3ff;">
+            <div class="arch-label" style="color:#7c3aed;">🗃️ Repository</div>
+            <div class="arch-desc">Interfaces Spring Data JPA — génère automatiquement les requêtes SQL.</div>
+        </div>
+        <div style="text-align:center;color:#9ca3af;font-size:18px;">↕</div>
+        <div class="arch-layer" style="border-color:#f87171; background:#fef2f2;">
+            <div class="arch-label" style="color:#dc2626;">🐬 MySQL</div>
+            <div class="arch-desc">Base de données relationnelle. Tables créées/mises à jour automatiquement par
+                Hibernate.</div>
+        </div>
+
+        <!-- ===================== 3. STRUCTURE ===================== -->
+        <h1 class="section-title section-break">3. Structure du projet</h1>
+
+        <div class="tree">
+            <span class="folder">ag-backend/</span><br>
+            <span style="color:#9ca3af">├── </span><span class="file">pom.xml</span> &nbsp;<span style="color:#9ca3af">←
+                Dépendances Maven (Spring Boot, JPA, Security, JWT, MySQL)</span><br>
+            <span style="color:#9ca3af">└── </span><span class="folder">src/main/java/com/ag/</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="file">AgApplication.java</span>
+            &nbsp;&nbsp;<span style="color:#9ca3af">← Point d'entrée (@SpringBootApplication)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="folder">config/</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span
+                class="file">SecurityConfig.java</span> &nbsp;<span style="color:#9ca3af">← Configuration Spring
+                Security + JWT</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span class="file">WebConfig.java</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← Configuration CORS</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ └── </span><span
+                class="file">DataInitializer.java</span> <span style="color:#9ca3af">← Création admin par défaut au
+                démarrage</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="folder">controller/</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span
+                class="file">AuthController.java</span> &nbsp;<span style="color:#9ca3af">← /api/auth/** (login,
+                register)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span
+                class="file">AdminController.java</span> <span style="color:#9ca3af">← /api/admin/** (CRUD
+                complet)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span
+                class="file">UserController.java</span> &nbsp;<span style="color:#9ca3af">← /api/user/** (AGs,
+                votes)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ └── </span><span
+                class="file">FileUploadController.java</span> <span style="color:#9ca3af">← Upload logos</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="folder">entity/</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span class="file">User.java</span>
+            &nbsp;&nbsp;&nbsp;<span class="file">Entreprise.java</span> &nbsp;<span
+                class="file">Actionnaire.java</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span class="file">Resolution.java</span>
+            &nbsp;<span class="file">AssembleeGenerale.java</span> &nbsp;<span class="file">Vote.java</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;│ ├── </span><span class="file">Role.java</span>
+            &nbsp;&nbsp;&nbsp;<span class="file">Choix.java</span> &nbsp;&nbsp;<span
+                style="color:#9ca3af">(enums)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="folder">dto/</span>
+            &nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← 8 DTOs (LoginRequest/Response, UserDTO,
+                EntrepriseDTO...)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="folder">repository/</span>
+            &nbsp;<span style="color:#9ca3af">← 6 interfaces JPA (UserRepo, AgRepo, VoteRepo...)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="folder">service/</span>
+            &nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← 6 services métier (AGService, VoteService,
+                AuthService...)</span><br>
+            <span style="color:#9ca3af">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="folder">security/</span>
+            &nbsp;<span style="color:#9ca3af">← JwtUtil, JwtAuthFilter, UserDetailsServiceImpl</span>
+        </div>
+
+        <!-- ===================== 4. ENTITÉS ===================== -->
+        <h1 class="section-title section-break">4. Modèle de données — Entités JPA</h1>
+
+        <h2 class="sub-title">👤 User</h2>
+        <p style="color:#374151;margin-bottom:10px;">Représente un utilisateur de la plateforme (admin ou actionnaire).
+        </p>
+        <table>
+            <tr>
+                <th>Champ</th>
+                <th>Type Java</th>
+                <th>Contrainte SQL</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>PK, AUTO_INCREMENT</td>
+                <td>Identifiant unique généré</td>
+            </tr>
+            <tr>
+                <td><code>username</code></td>
+                <td>String</td>
+                <td>UNIQUE, NOT NULL</td>
+                <td>Nom de connexion</td>
+            </tr>
+            <tr>
+                <td><code>password</code></td>
+                <td>String</td>
+                <td>NOT NULL</td>
+                <td>Mot de passe haché BCrypt</td>
+            </tr>
+            <tr>
+                <td><code>role</code></td>
+                <td>Role (enum)</td>
+                <td>VARCHAR</td>
+                <td>ADMIN ou USER</td>
+            </tr>
+            <tr>
+                <td><code>nom</code></td>
+                <td>String</td>
+                <td>—</td>
+                <td>Nom de famille</td>
+            </tr>
+            <tr>
+                <td><code>prenom</code></td>
+                <td>String</td>
+                <td>—</td>
+                <td>Prénom</td>
+            </tr>
+            <tr>
+                <td><code>email</code></td>
+                <td>String</td>
+                <td>—</td>
+                <td>Adresse email</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">🏢 Entreprise</h2>
+        <table>
+            <tr>
+                <th>Champ</th>
+                <th>Type Java</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>Identifiant unique</td>
+            </tr>
+            <tr>
+                <td><code>nom</code></td>
+                <td>String</td>
+                <td>Nom de l'entreprise</td>
+            </tr>
+            <tr>
+                <td><code>secteur</code></td>
+                <td>String</td>
+                <td>Secteur d'activité</td>
+            </tr>
+            <tr>
+                <td><code>description</code></td>
+                <td>String (TEXT)</td>
+                <td>Description de l'entreprise</td>
+            </tr>
+            <tr>
+                <td><code>logoUrl</code></td>
+                <td>String</td>
+                <td>URL du logo uploadé</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">👥 Actionnaire</h2>
+        <p style="color:#374151;margin-bottom:8px;">Table de liaison User ↔ Entreprise avec le nombre d'actions
+            détenues.</p>
+        <table>
+            <tr>
+                <th>Champ</th>
+                <th>Type Java</th>
+                <th>Relation</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>PK</td>
+                <td>Identifiant unique</td>
+            </tr>
+            <tr>
+                <td><code>user</code></td>
+                <td>User</td>
+                <td><code>@ManyToOne</code></td>
+                <td>L'utilisateur actionnaire</td>
+            </tr>
+            <tr>
+                <td><code>entreprise</code></td>
+                <td>Entreprise</td>
+                <td><code>@ManyToOne</code></td>
+                <td>L'entreprise concernée</td>
+            </tr>
+            <tr>
+                <td><code>nombreActions</code></td>
+                <td>Integer</td>
+                <td>—</td>
+                <td>Nombre d'actions → poids du vote</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">📋 Resolution</h2>
+        <table>
+            <tr>
+                <th>Champ</th>
+                <th>Type Java</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>Identifiant unique</td>
+            </tr>
+            <tr>
+                <td><code>titre</code></td>
+                <td>String</td>
+                <td>Titre de la résolution</td>
+            </tr>
+            <tr>
+                <td><code>description</code></td>
+                <td>String</td>
+                <td>Détails (optionnel)</td>
+            </tr>
+            <tr>
+                <td><code>ordre</code></td>
+                <td>Integer</td>
+                <td>Ordre de passage lors du vote</td>
+            </tr>
+            <tr>
+                <td><code>dateAG</code></td>
+                <td>LocalDate</td>
+                <td>Date de l'AG concernée</td>
+            </tr>
+            <tr>
+                <td><code>entreprise</code></td>
+                <td>Entreprise</td>
+                <td><code>@ManyToOne</code> — appartient à une entreprise</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">🗳️ AssembleeGenerale</h2>
+        <p style="color:#374151;margin-bottom:8px;">Entité centrale du système — relie une entreprise à un ensemble de
+            résolutions.</p>
+        <table>
+            <tr>
+                <th>Champ</th>
+                <th>Type Java</th>
+                <th>Relation</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>PK</td>
+                <td>Identifiant unique</td>
+            </tr>
+            <tr>
+                <td><code>titre</code></td>
+                <td>String</td>
+                <td>—</td>
+                <td>Titre de l'AG</td>
+            </tr>
+            <tr>
+                <td><code>date</code></td>
+                <td>LocalDate</td>
+                <td>—</td>
+                <td>Date de l'AG</td>
+            </tr>
+            <tr>
+                <td><code>lieu</code></td>
+                <td>String</td>
+                <td>—</td>
+                <td>Lieu physique ou virtuel</td>
+            </tr>
+            <tr>
+                <td><code>description</code></td>
+                <td>String (TEXT)</td>
+                <td>—</td>
+                <td>Contexte et objectifs</td>
+            </tr>
+            <tr>
+                <td><code>entreprise</code></td>
+                <td>Entreprise</td>
+                <td><code>@ManyToOne</code></td>
+                <td>L'entreprise organisatrice</td>
+            </tr>
+            <tr>
+                <td><code>resolutions</code></td>
+                <td>List&lt;Resolution&gt;</td>
+                <td><code>@ManyToMany</code></td>
+                <td>Résolutions à voter (table ag_resolutions)</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">🗳️ Vote</h2>
+        <table>
+            <tr>
+                <th>Champ</th>
+                <th>Type Java</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>Identifiant unique</td>
+            </tr>
+            <tr>
+                <td><code>actionnaire</code></td>
+                <td>Actionnaire</td>
+                <td><code>@ManyToOne</code> — qui a voté</td>
+            </tr>
+            <tr>
+                <td><code>resolution</code></td>
+                <td>Resolution</td>
+                <td><code>@ManyToOne</code> — sur quoi</td>
+            </tr>
+            <tr>
+                <td><code>choix</code></td>
+                <td>Choix (enum)</td>
+                <td>POUR, CONTRE ou NEUTRE</td>
+            </tr>
+            <tr>
+                <td><code>poids</code></td>
+                <td>Integer</td>
+                <td>Nombre d'actions de l'actionnaire (copie)</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">🗂️ Diagramme des relations</h2>
+        <div class="info-box">
+            <strong>User</strong> (1) ←→ (N) <strong>Actionnaire</strong> (N) ←→ (1) <strong>Entreprise</strong><br>
+            <strong>Entreprise</strong> (1) ←→ (N) <strong>Resolution</strong><br>
+            <strong>AssembleeGenerale</strong> (N) ←→ (M) <strong>Resolution</strong> [table ag_resolutions]<br>
+            <strong>Actionnaire</strong> (1) ←→ (N) <strong>Vote</strong> (N) ←→ (1) <strong>Resolution</strong>
+        </div>
+
+        <!-- ===================== 5. SÉCURITÉ ===================== -->
+        <h1 class="section-title section-break">5. Sécurité — JWT + Spring Security</h1>
+
+        <h2 class="sub-title">🔑 JwtUtil.java</h2>
+
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>Entrée</th>
+                <th>Sortie</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>generateToken()</code></td>
+                <td>username, role</td>
+                <td>String JWT</td>
+                <td>Crée un token signé HMAC-SHA256, valide 24h</td>
+            </tr>
+            <tr>
+                <td><code>getUsernameFromToken()</code></td>
+                <td>String token</td>
+                <td>String username</td>
+                <td>Extrait le subject (username) du payload JWT</td>
+            </tr>
+            <tr>
+                <td><code>validateToken()</code></td>
+                <td>String token</td>
+                <td>boolean</td>
+                <td>Vérifie signature + expiration (retourne false si invalide)</td>
+            </tr>
+        </table>
+
+        <pre><span class="comment">// Structure d'un token JWT généré :</span>
+<span class="comment">// Header: {"alg":"HS256","typ":"JWT"}</span>
+<span class="comment">// Payload: {"sub":"admin","role":"ADMIN","iat":...,"exp":...}</span>
+<span class="comment">// Signature: HMAC-SHA256(base64(header)+"."+base64(payload), secretKey)</span>
+
+<span class="annot">@Value</span>(<span class="string">"${app.jwt.secret}"</span>)  <span class="comment">// clé secrète dans application.properties</span>
+<span class="keyword">private</span> <span class="type">String</span> jwtSecret;
+
+<span class="annot">@Value</span>(<span class="string">"${app.jwt.expiration}"</span>) <span class="comment">// 86400000 ms = 24 heures</span>
+<span class="keyword">private long</span> jwtExpiration;</pre>
+
+        <h2 class="sub-title">🔒 JwtAuthFilter.java</h2>
+        <p style="margin-bottom:10px;color:#374151;">
+            Filtre HTTP exécuté <strong>avant chaque requête</strong>. Intercepte le header <code>Authorization</code>,
+            valide le token et charge l'utilisateur dans le contexte Spring Security.
+        </p>
+
+        <div class="flow">
+            <div class="flow-step">Requête HTTP</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">Lecture header Authorization</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">validateToken()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">getUsernameFromToken()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">loadUserByUsername()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">SecurityContextHolder.set()</div>
+        </div>
+
+        <h2 class="sub-title">⚙️ SecurityConfig.java</h2>
+        <table>
+            <tr>
+                <th>Route</th>
+                <th>Accès autorisé</th>
+            </tr>
+            <tr>
+                <td><code>/api/auth/**</code></td>
+                <td><span class="badge badge-green">Public</span> (login, register)</td>
+            </tr>
+            <tr>
+                <td><code>/api/admin/**</code></td>
+                <td><span class="badge badge-orange">ROLE_ADMIN</span> uniquement</td>
+            </tr>
+            <tr>
+                <td><code>/api/user/**</code></td>
+                <td><span class="badge badge-blue">ROLE_USER</span> uniquement</td>
+            </tr>
+            <tr>
+                <td><code>/uploads/**</code></td>
+                <td><span class="badge badge-green">Public</span> (accès aux logos)</td>
+            </tr>
+            <tr>
+                <td>Toutes autres routes</td>
+                <td><span class="badge badge-red">Authentifié</span></td>
+            </tr>
+        </table>
+
+        <pre><span class="comment">// Configuration CSRF désactivée (API REST stateless)</span>
+<span class="comment">// Session STATELESS — chaque requête porte son propre token JWT</span>
+<span class="comment">// Encodage BCrypt pour les mots de passe (force=10)</span>
+http
+  .<span class="fn">sessionManagement</span>(s -> s.<span class="fn">sessionCreationPolicy</span>(STATELESS))
+  .<span class="fn">addFilterBefore</span>(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+  .<span class="fn">authorizeHttpRequests</span>(auth -> auth
+    .<span class="fn">requestMatchers</span>(<span class="string">"/api/auth/**"</span>).permitAll()
+    .<span class="fn">requestMatchers</span>(<span class="string">"/api/admin/**"</span>).hasRole(<span class="string">"ADMIN"</span>)
+    .<span class="fn">requestMatchers</span>(<span class="string">"/api/user/**"</span>).hasRole(<span class="string">"USER"</span>)
+    .<span class="fn">anyRequest</span>().authenticated()
+  );</pre>
+
+        <!-- ===================== 6. CONTRÔLEURS ===================== -->
+        <h1 class="section-title section-break">6. Contrôleurs — API REST</h1>
+
+        <h2 class="sub-title">🔑 AuthController — /api/auth</h2>
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>URL</th>
+                <th>Corps (JSON)</th>
+                <th>Réponse</th>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/api/auth/login</code></td>
+                <td><code>{"username":"…","password":"…"}</code></td>
+                <td>JWT + profil utilisateur</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/api/auth/register</code></td>
+                <td><code>{"username","password","nom","prenom","email"}</code></td>
+                <td>UserDTO créé</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">⚙️ AdminController — /api/admin (rôle ADMIN requis)</h2>
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>URL</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/entreprises</code></td>
+                <td>Liste toutes les entreprises</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/entreprises</code></td>
+                <td>Créer une entreprise</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-orange">PUT</span></td>
+                <td><code>/entreprises/{id}</code></td>
+                <td>Modifier une entreprise</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-red">DELETE</span></td>
+                <td><code>/entreprises/{id}</code></td>
+                <td>Supprimer une entreprise</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/actionnaires</code></td>
+                <td>Liste tous les actionnaires (user+entreprise)</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/actionnaires</code></td>
+                <td>Lier un utilisateur comme actionnaire</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-red">DELETE</span></td>
+                <td><code>/actionnaires/{id}</code></td>
+                <td>Retirer un actionnaire</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/users</code></td>
+                <td>Liste des utilisateurs disponibles</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/users</code></td>
+                <td>Créer un nouvel utilisateur</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/resolutions</code></td>
+                <td>Liste toutes les résolutions</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/resolutions</code></td>
+                <td>Créer une résolution</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-orange">PUT</span></td>
+                <td><code>/resolutions/{id}</code></td>
+                <td>Modifier une résolution</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-red">DELETE</span></td>
+                <td><code>/resolutions/{id}</code></td>
+                <td>Supprimer une résolution</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/ag</code></td>
+                <td>Liste toutes les AGs</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/ag</code></td>
+                <td>Créer une AG avec résolutions liées</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-orange">PUT</span></td>
+                <td><code>/ag/{id}</code></td>
+                <td>Modifier une AG</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-red">DELETE</span></td>
+                <td><code>/ag/{id}</code></td>
+                <td>Supprimer une AG</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">👤 UserController — /api/user (rôle USER requis)</h2>
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>URL</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/api/user/ags</code></td>
+                <td>AGs auxquelles l'actionnaire connecté peut voter</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">POST</span></td>
+                <td><code>/api/user/vote</code></td>
+                <td>Exprimer un vote : <code>{"resolutionId":1,"choix":"POUR"}</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">GET</span></td>
+                <td><code>/api/user/votes</code></td>
+                <td>Tous mes votes exprimés (avec poids)</td>
+            </tr>
+        </table>
+
+        <!-- ===================== 7. SERVICES ===================== -->
+        <h1 class="section-title section-break">7. Couche Services — Logique Métier</h1>
+
+        <h2 class="sub-title">⚙️ AuthService.java</h2>
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>login(LoginRequest)</code></td>
+                <td>Vérifie username + password (BCrypt), génère le token JWT, retourne LoginResponse</td>
+            </tr>
+            <tr>
+                <td><code>register(RegisterRequest)</code></td>
+                <td>Vérifie que le username n'existe pas, hache le mot de passe, crée l'utilisateur avec rôle USER</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">⚙️ AGService.java</h2>
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>findAll()</code></td>
+                <td>Liste toutes les AGs → convertit chaque entité en DTO</td>
+            </tr>
+            <tr>
+                <td><code>findByUser(userId)</code></td>
+                <td>Retourne les AGs des entreprises où l'utilisateur est actionnaire</td>
+            </tr>
+            <tr>
+                <td><code>create(dto)</code></td>
+                <td>Charge l'entreprise, charge les résolutions par IDs, crée et persiste l'AG</td>
+            </tr>
+            <tr>
+                <td><code>update(id, dto)</code></td>
+                <td>Met à jour les champs + met à jour la liste des résolutions liées</td>
+            </tr>
+            <tr>
+                <td><code>toDTO(ag)</code></td>
+                <td>Convertit AssembleeGenerale → AssembleeGeneraleDTO (aplatit les relations)</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">⚙️ VoteService.java</h2>
+        <p style="margin-bottom:10px;color:#374151;">Logique de vote avec contrainte d'unicité (un actionnaire ne vote
+            qu'une fois par résolution) :</p>
+
+        <pre><span class="annot">@Transactional</span>
+<span class="keyword">public</span> <span class="type">VoteDTO</span> <span class="fn">vote</span>(<span class="type">VoteRequest</span> request, <span class="type">String</span> username) {
+    <span class="comment">// 1. Charger l'utilisateur connecté</span>
+    <span class="type">User</span> user = userRepo.<span class="fn">findByUsername</span>(username).orElseThrow(...);
+
+    <span class="comment">// 2. Trouver son lien actionnaire avec l'entreprise de la résolution</span>
+    <span class="type">Actionnaire</span> actionnaire = actionnaireRepo
+        .<span class="fn">findByUserAndEntreprise</span>(user, resolution.getEntreprise())
+        .orElseThrow(() -> <span class="keyword">new</span> <span class="type">RuntimeException</span>(<span class="string">"Pas actionnaire"</span>));
+
+    <span class="comment">// 3. Chercher un vote existant (UPDATE si existe, INSERT sinon)</span>
+    <span class="type">Vote</span> vote = voteRepo
+        .<span class="fn">findByActionnaireAndResolution</span>(actionnaire, resolution)
+        .orElse(<span class="keyword">new</span> <span class="type">Vote</span>());
+
+    <span class="comment">// 4. Sauvegarder avec le poids = nombre d'actions de l'actionnaire</span>
+    vote.<span class="fn">setChoix</span>(request.getChoix());
+    vote.<span class="fn">setPoids</span>(actionnaire.<span class="fn">getNombreActions</span>());
+    voteRepo.<span class="fn">save</span>(vote);
+}</pre>
+
+        <h2 class="sub-title">⚙️ ActionnaireService.java</h2>
+        <table>
+            <tr>
+                <th>Méthode</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>findAll()</code></td>
+                <td>Liste tous les liens user-entreprise avec infos enrichies (nom, prénom, username)</td>
+            </tr>
+            <tr>
+                <td><code>create(dto)</code></td>
+                <td>Crée le lien actionnaire entre un User et une Entreprise avec le nombre d'actions</td>
+            </tr>
+            <tr>
+                <td><code>findAvailableUsers()</code></td>
+                <td>Tous les utilisateurs (pour le dropdown dans le formulaire admin)</td>
+            </tr>
+            <tr>
+                <td><code>createUser(dto)</code></td>
+                <td>Crée un User avec rôle USER et password haché BCrypt</td>
+            </tr>
+        </table>
+
+        <!-- ===================== 8. REPOSITORIES ===================== -->
+        <h1 class="section-title section-break">8. Couche Repository — Spring Data JPA</h1>
+
+        <p style="margin-bottom:14px;color:#374151;">
+            Chaque entité possède son interface Repository qui étend <code>JpaRepository</code>.
+            Spring génère automatiquement les requêtes SQL à partir des noms de méthodes.
+        </p>
+
+        <table>
+            <tr>
+                <th>Repository</th>
+                <th>Méthode personnalisée clé</th>
+                <th>SQL généré</th>
+            </tr>
+            <tr>
+                <td><code>UserRepository</code></td>
+                <td><code>findByUsername(String)</code></td>
+                <td>SELECT * FROM users WHERE username = ?</td>
+            </tr>
+            <tr>
+                <td><code>ActionnaireRepository</code></td>
+                <td><code>findByEntrepriseId(Long)</code></td>
+                <td>SELECT * FROM actionnaires WHERE entreprise_id = ?</td>
+            </tr>
+            <tr>
+                <td><code>ActionnaireRepository</code></td>
+                <td><code>findByUserAndEntreprise(User, Entreprise)</code></td>
+                <td>SELECT * FROM actionnaires WHERE user_id = ? AND entreprise_id = ?</td>
+            </tr>
+            <tr>
+                <td><code>AssembleeGeneraleRepository</code></td>
+                <td><code>findByEntrepriseId(Long)</code></td>
+                <td>SELECT * FROM assemblees_generales WHERE entreprise_id = ?</td>
+            </tr>
+            <tr>
+                <td><code>AssembleeGeneraleRepository</code></td>
+                <td><code>findByActionnaire(Long userId)</code></td>
+                <td>Requête JPQL — AGs des entreprises où l'user est actionnaire</td>
+            </tr>
+            <tr>
+                <td><code>VoteRepository</code></td>
+                <td><code>findByActionnaireAndResolution()</code></td>
+                <td>Vote d'un actionnaire sur une résolution spécifique</td>
+            </tr>
+            <tr>
+                <td><code>VoteRepository</code></td>
+                <td><code>findByActionnaire_User_Username(String)</code></td>
+                <td>Tous les votes d'un utilisateur par son username</td>
+            </tr>
+        </table>
+
+        <!-- ===================== 9. DTOs ===================== -->
+        <h1 class="section-title">9. DTOs — Data Transfer Objects</h1>
+
+        <p style="margin-bottom:14px;color:#374151;">
+            Les DTOs sont les objets échangés entre le client et le serveur. Ils ne contiennent jamais les données
+            sensibles (ex: mot de passe haché) ni les collections JPA non sérialisables.
+        </p>
+
+        <table>
+            <tr>
+                <th>DTO</th>
+                <th>Champs principaux</th>
+                <th>Utilisation</th>
+            </tr>
+            <tr>
+                <td><code>LoginRequest</code></td>
+                <td>username, password</td>
+                <td>Corps du POST /auth/login</td>
+            </tr>
+            <tr>
+                <td><code>LoginResponse</code></td>
+                <td>token, username, role, id, nom, prénom</td>
+                <td>Réponse du login</td>
+            </tr>
+            <tr>
+                <td><code>RegisterRequest</code></td>
+                <td>username, password, nom, prénom, email</td>
+                <td>Corps du POST /auth/register</td>
+            </tr>
+            <tr>
+                <td><code>UserDTO</code></td>
+                <td>id, username, nom, prénom, email, role</td>
+                <td>Profil utilisateur (sans password)</td>
+            </tr>
+            <tr>
+                <td><code>EntrepriseDTO</code></td>
+                <td>id, nom, secteur, description, logoUrl</td>
+                <td>CRUD entreprises</td>
+            </tr>
+            <tr>
+                <td><code>ActionnaireDTO</code></td>
+                <td>id, userId, entrepriseId, nombreActions, userNom, userPrenom, username</td>
+                <td>Actionnaire enrichi</td>
+            </tr>
+            <tr>
+                <td><code>AssembleeGeneraleDTO</code></td>
+                <td>id, titre, date, lieu, description, entrepriseId, entrepriseNom, resolutionIds[], resolutions[]</td>
+                <td>AG complète</td>
+            </tr>
+            <tr>
+                <td><code>ResolutionDTO</code></td>
+                <td>id, titre, description, ordre, dateAG, entrepriseId</td>
+                <td>Résolution</td>
+            </tr>
+            <tr>
+                <td><code>VoteDTO</code></td>
+                <td>id, resolutionId, resolutionTitre, choix, poids</td>
+                <td>Vote exprimé</td>
+            </tr>
+            <tr>
+                <td><code>VoteRequest</code></td>
+                <td>resolutionId, choix (POUR/CONTRE/NEUTRE)</td>
+                <td>Corps du POST /user/vote</td>
+            </tr>
+        </table>
+
+        <!-- ===================== 10. CONFIG ===================== -->
+        <h1 class="section-title section-break">10. Configuration</h1>
+
+        <h2 class="sub-title">🌐 WebConfig.java — CORS</h2>
+        <p style="margin-bottom:10px;color:#374151;">
+            Configure les en-têtes CORS pour permettre au frontend React (port 5173) d'appeler l'API (port 8080) :
+        </p>
+        <table>
+            <tr>
+                <th>Paramètre</th>
+                <th>Valeur</th>
+            </tr>
+            <tr>
+                <td>Origins autorisées</td>
+                <td><code>http://localhost:5173</code></td>
+            </tr>
+            <tr>
+                <td>Méthodes autorisées</td>
+                <td>GET, POST, PUT, DELETE, OPTIONS</td>
+            </tr>
+            <tr>
+                <td>Headers autorisés</td>
+                <td>Authorization, Content-Type</td>
+            </tr>
+            <tr>
+                <td>Allow credentials</td>
+                <td>true</td>
+            </tr>
+        </table>
+
+        <h2 class="sub-title">🚀 DataInitializer.java</h2>
+        <p style="color:#374151;font-size:12px;">
+            Au démarrage de l'application, vérifie si l'admin existe. Sinon, crée automatiquement un compte admin :
+            <code>username = "admin"</code>, <code>password = "Admin@1234"</code>, <code>rôle = ADMIN</code>.
+        </p>
+
+        <h2 class="sub-title">📁 FileUploadController.java</h2>
+        <p style="color:#374151;font-size:12px;">
+            Endpoint <code>POST /api/files/upload</code> — reçoit un fichier image, le sauvegarde dans le dossier
+            <code>/uploads</code>, retourne l'URL accessible via <code>/uploads/nom-fichier.jpg</code>.
+        </p>
+
+        <!-- ===================== 11. FLUX ===================== -->
+        <h1 class="section-title section-break">11. Flux complets</h1>
+
+        <h2 class="sub-title">🔑 Flux de connexion</h2>
+        <div class="flow">
+            <div class="flow-step">POST /api/auth/login</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">AuthService.login()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">BCrypt.matches()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">JwtUtil.generateToken()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">LoginResponse {token, role…}</div>
+        </div>
+
+        <h2 class="sub-title" style="margin-top:24px;">🗳️ Flux de vote</h2>
+        <div class="flow">
+            <div class="flow-step">POST /api/user/vote</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">JwtAuthFilter valide token</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">UserController.vote()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">VoteService vérifie actionnaire</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">INSERT / UPDATE vote en DB</div>
+        </div>
+
+        <h2 class="sub-title" style="margin-top:24px;">➕ Flux de création d'AG</h2>
+        <div class="flow">
+            <div class="flow-step">POST /api/admin/ag</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">Validation JWT (ADMIN)</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">AGService.create(DTO)</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">Charge Entreprise + Resolutions</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">agRepository.save()</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">INSERT ag + INSERT ag_resolutions</div>
+        </div>
+
+        <h2 class="sub-title" style="margin-top:24px;">👤 Flux récupération AGs utilisateur</h2>
+        <div class="flow">
+            <div class="flow-step">GET /api/user/ags</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">Extraction username du JWT</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">AGService.findByUser(userId)</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">JPQL: AGs des entreprises de l'actionnaire</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">Liste AssembleeGeneraleDTO</div>
+        </div>
+
+        <hr class="divider">
+        <p style="text-align:center; color:#9ca3af; font-size:11px; padding-bottom:20px;">
+            Documentation Backend — Système de Vote AG — Soutenance de projet
+        </p>
+
+    </div>
+</body>
+
+</html>

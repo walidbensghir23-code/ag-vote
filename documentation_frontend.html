@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Documentation Frontend — Système de Vote AG</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; color: #1a1a2e; background: #fff; line-height: 1.6; }
+  
+  /* PAGE DE GARDE */
+  .cover {
+    page-break-after: always;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white; text-align: center; padding: 60px 40px;
+  }
+  .cover-badge {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50px; padding: 8px 24px; font-size: 13px; margin-bottom: 32px;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .cover h1 { font-size: 42px; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+  .cover h2 { font-size: 20px; font-weight: 300; margin-bottom: 40px; opacity: 0.7; }
+  .cover-divider { width: 80px; height: 4px; background: linear-gradient(90deg,#11998e,#38ef7d); border-radius: 2px; margin: 0 auto 40px; }
+  .cover-info { font-size: 14px; opacity: 0.6; line-height: 2; }
+  .cover-tech {
+    display: flex; gap: 16px; margin-top: 32px; flex-wrap: wrap; justify-content: center;
+  }
+  .tech-badge {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px; padding: 8px 18px; font-size: 12px; font-weight: 600;
+  }
+
+  /* LAYOUT */
+  .content { max-width: 800px; margin: 0 auto; padding: 40px 40px; }
+  
+  /* SECTION */
+  .section { margin-bottom: 40px; page-break-inside: avoid; }
+  .section-break { page-break-before: always; }
+
+  /* TITRES */
+  h1.section-title {
+    font-size: 26px; font-weight: 900; color: #0f2027;
+    border-left: 5px solid #11998e; padding-left: 16px;
+    margin-bottom: 20px; margin-top: 40px;
+  }
+  h2.sub-title {
+    font-size: 17px; font-weight: 800; color: #203a43;
+    margin-bottom: 12px; margin-top: 24px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  h3.item-title {
+    font-size: 14px; font-weight: 700; color: #059669;
+    margin-bottom: 6px; margin-top: 16px;
+  }
+
+  /* INTRO BOX */
+  .intro-box {
+    background: linear-gradient(135deg, #f0fdf4, #e8fdf5);
+    border: 1.5px solid #86efac; border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 28px;
+  }
+  .intro-box p { color: #166534; font-size: 13px; line-height: 1.7; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12px; }
+  th {
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    color: white; padding: 10px 14px; text-align: left;
+    font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) { background: #f9fafb; }
+  tr:hover { background: #f0fdf4; }
+
+  /* CODE */
+  code {
+    background: #1e293b; color: #38ef7d; padding: 2px 7px;
+    border-radius: 4px; font-family: 'Courier New', monospace; font-size: 11px;
+  }
+  pre {
+    background: #1e293b; color: #e2e8f0; padding: 16px 20px;
+    border-radius: 10px; overflow-x: auto; font-size: 11px;
+    font-family: 'Courier New', monospace; margin: 14px 0; line-height: 1.6;
+    border-left: 4px solid #38ef7d;
+  }
+  pre .keyword { color: #c792ea; }
+  pre .string  { color: #c3e88d; }
+  pre .comment { color: #546e7a; font-style: italic; }
+  pre .fn      { color: #82aaff; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .card {
+    border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 16px;
+    background: #fff; page-break-inside: avoid;
+  }
+  .card-icon { font-size: 22px; margin-bottom: 6px; }
+  .card-title { font-weight: 800; font-size: 13px; color: #1a1a2e; margin-bottom: 4px; }
+  .card-desc { font-size: 11.5px; color: #6b7280; line-height: 1.5; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 99px;
+    font-size: 10px; font-weight: 700; margin-right: 4px;
+  }
+  .badge-green  { background: #d1fae5; color: #065f46; }
+  .badge-blue   { background: #dbeafe; color: #1e40af; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-gray   { background: #f3f4f6; color: #374151; }
+
+  /* FLOW */
+  .flow {
+    display: flex; align-items: center; gap: 6px;
+    margin: 14px 0; flex-wrap: wrap;
+  }
+  .flow-step {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white; padding: 6px 14px; border-radius: 99px;
+    font-size: 11px; font-weight: 700; white-space: nowrap;
+  }
+  .flow-arrow { color: #9ca3af; font-size: 16px; font-weight: 300; }
+
+  /* HIGHLIGHT */
+  .highlight {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 1px solid #f59e0b; border-radius: 8px;
+    padding: 12px 16px; margin: 12px 0; font-size: 12px;
+  }
+
+  /* PRINT */
+  @media print {
+    body { font-size: 12px; }
+    .cover { min-height: 100vh; }
+    h1.section-title { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+  }
+
+  /* TOC */
+  .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px 28px; margin-bottom: 36px; }
+  .toc h2 { font-size: 16px; margin-bottom: 16px; color: #0f2027; }
+  .toc-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted #e2e8f0; font-size: 12px; }
+  .toc-item:last-child { border: none; }
+  .toc-num { color: #059669; font-weight: 700; margin-right: 8px; }
+
+  /* DIVIDER */
+  hr.divider { border: none; border-top: 2px solid #e5e7eb; margin: 32px 0; }
+
+  /* FILE TREE */
+  .tree { font-family: 'Courier New', monospace; font-size: 11.5px; background: #f8fafc; padding: 16px 20px; border-radius: 10px; border: 1px solid #e2e8f0; line-height: 2; }
+  .tree .folder { color: #059669; font-weight: 700; }
+  .tree .file   { color: #374151; }
+  .tree .indent { color: #9ca3af; }
+</style>
+</head>
+<body>
+
+<!-- ===========================================================
+     PAGE DE GARDE
+     =========================================================== -->
+<div class="cover">
+  <div class="cover-badge">Documentation Technique</div>
+  <h1>🖥️ Frontend React</h1>
+  <h2>Système de Vote — Assemblées Générales</h2>
+  <div class="cover-divider"></div>
+  <div class="cover-info">
+    <p>Application web de vote pour actionnaires</p>
+    <p>Interface d'administration et espace actionnaire</p>
+  </div>
+  <div class="cover-tech">
+    <span class="tech-badge">⚛️ React 18</span>
+    <span class="tech-badge">🗺️ React Router v6</span>
+    <span class="tech-badge">🌐 Axios</span>
+    <span class="tech-badge">⚡ Vite</span>
+    <span class="tech-badge">🔐 JWT Auth</span>
+  </div>
+</div>
+
+<!-- ===========================================================
+     CONTENU
+     =========================================================== -->
+<div class="content">
+
+  <!-- TABLE DES MATIÈRES -->
+  <div class="toc">
+    <h2>📋 Table des matières</h2>
+    <div class="toc-item"><span><span class="toc-num">1.</span> Présentation générale</span><span>2</span></div>
+    <div class="toc-item"><span><span class="toc-num">2.</span> Architecture et structure du projet</span><span>2</span></div>
+    <div class="toc-item"><span><span class="toc-num">3.</span> Technologies utilisées</span><span>3</span></div>
+    <div class="toc-item"><span><span class="toc-num">4.</span> Système d'authentification</span><span>3</span></div>
+    <div class="toc-item"><span><span class="toc-num">5.</span> Routage et protection des routes</span><span>4</span></div>
+    <div class="toc-item"><span><span class="toc-num">6.</span> Couche API (api.js)</span><span>5</span></div>
+    <div class="toc-item"><span><span class="toc-num">7.</span> Pages Administrateur</span><span>6</span></div>
+    <div class="toc-item"><span><span class="toc-num">8.</span> Pages Utilisateur / Actionnaire</span><span>8</span></div>
+    <div class="toc-item"><span><span class="toc-num">9.</span> Composants partagés</span><span>9</span></div>
+    <div class="toc-item"><span><span class="toc-num">10.</span> Flux complets (diagrammes)</span><span>10</span></div>
+  </div>
+
+  <!-- ===================== 1. PRÉSENTATION ===================== -->
+  <h1 class="section-title">1. Présentation générale</h1>
+  <div class="intro-box">
+    <p>
+      Le frontend est une <strong>application React 18 SPA</strong> (Single Page Application) qui permet à deux types d'utilisateurs d'interagir avec le système de gestion des Assemblées Générales :<br><br>
+      • <strong>Administrateur</strong> : crée les entreprises, gère les actionnaires et résolutions, organise les AGs<br>
+      • <strong>Actionnaire (USER)</strong> : consulte les AGs auxquelles il est convié et exprime ses votes
+    </p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🔑</div>
+      <div class="card-title">Espace Administrateur</div>
+      <div class="card-desc">Gestion complète des entreprises, actionnaires, résolutions et assemblées générales. Création d'AGs en 3 étapes guidées.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗳️</div>
+      <div class="card-title">Espace Actionnaire</div>
+      <div class="card-desc">Tableau de bord personnel, liste des AGs disponibles, vote sur les résolutions (POUR / CONTRE / ABSTENTION), historique des votes.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔐</div>
+      <div class="card-title">Authentification JWT</div>
+      <div class="card-desc">Connexion sécurisée avec token JWT stocké dans localStorage. Routes protégées selon le rôle (ADMIN / USER).</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <div class="card-title">Interface Responsive</div>
+      <div class="card-desc">Mise en page avec sidebar fixe, contenu principal adaptatif. Styles CSS en JavaScript (inline styles) pour chaque composant.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 2. STRUCTURE ===================== -->
+  <h1 class="section-title section-break">2. Architecture et structure du projet</h1>
+
+  <div class="tree">
+    <span class="folder">ag-frontend/</span><br>
+    <span class="indent">├── </span><span class="folder">public/</span><br>
+    <span class="indent">├── </span><span class="folder">src/</span><br>
+    <span class="indent">│   ├── </span><span class="file">main.jsx</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← Point d'entrée React</span><br>
+    <span class="indent">│   ├── </span><span class="file">App.jsx</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← Routage principal + PrivateRoute</span><br>
+    <span class="indent">│   ├── </span><span class="file">index.css</span> &nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← Styles globaux (variables CSS, layout)</span><br>
+    <span class="indent">│   ├── </span><span class="folder">api/</span><br>
+    <span class="indent">│   │   └── </span><span class="file">api.js</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9ca3af">← Toutes les fonctions d'appel HTTP (Axios)</span><br>
+    <span class="indent">│   ├── </span><span class="folder">context/</span><br>
+    <span class="indent">│   │   └── </span><span class="file">AuthContext.jsx</span> <span style="color:#9ca3af">← Contexte global (user, login, logout)</span><br>
+    <span class="indent">│   ├── </span><span class="folder">components/</span><br>
+    <span class="indent">│   │   └── </span><span class="file">Sidebar.jsx</span> &nbsp;&nbsp;<span style="color:#9ca3af">← Menu de navigation latéral</span><br>
+    <span class="indent">│   ├── </span><span class="folder">pages/</span><br>
+    <span class="indent">│   │   ├── </span><span class="file">LoginPage.jsx</span> &nbsp;<span style="color:#9ca3af">← Connexion & Inscription</span><br>
+    <span class="indent">│   │   ├── </span><span class="folder">admin/</span><br>
+    <span class="indent">│   │   │   ├── </span><span class="file">EntreprisesPage.jsx</span><br>
+    <span class="indent">│   │   │   ├── </span><span class="file">ActionnairesPage.jsx</span><br>
+    <span class="indent">│   │   │   ├── </span><span class="file">ResolutionsPage.jsx</span><br>
+    <span class="indent">│   │   │   └── </span><span class="file">AGPage.jsx</span> &nbsp;&nbsp;<span style="color:#9ca3af">← Page principale (wizard 3 étapes)</span><br>
+    <span class="indent">│   │   └── </span><span class="folder">user/</span><br>
+    <span class="indent">│   │       ├── </span><span class="file">DashboardPage.jsx</span><br>
+    <span class="indent">│   │       ├── </span><span class="file">AGVotePage.jsx</span><br>
+    <span class="indent">│   │       └── </span><span class="file">MyVotesPage.jsx</span><br>
+    <span class="indent">│   └── </span><span class="folder">utils/</span><br>
+    <span class="indent">│       └── </span><span class="file">generateAGPdf.js</span><br>
+    <span class="indent">├── </span><span class="file">package.json</span><br>
+    <span class="indent">└── </span><span class="file">vite.config.js</span>
+  </div>
+
+  <!-- ===================== 3. TECHNOLOGIES ===================== -->
+  <h1 class="section-title">3. Technologies utilisées</h1>
+
+  <table>
+    <tr><th>Bibliothèque / Outil</th><th>Version</th><th>Rôle dans le projet</th></tr>
+    <tr><td><strong>React</strong></td><td>18.x</td><td>Framework UI — composants, hooks (useState, useEffect, useContext)</td></tr>
+    <tr><td><strong>React Router DOM</strong></td><td>v6</td><td>Navigation entre pages, routes protégées (PrivateRoute), redirect</td></tr>
+    <tr><td><strong>Axios</strong></td><td>1.x</td><td>Client HTTP — requêtes vers l'API REST Spring Boot</td></tr>
+    <tr><td><strong>Vite</strong></td><td>5.x</td><td>Bundler et serveur de développement ultra-rapide (remplacement de CRA)</td></tr>
+    <tr><td><strong>JWT (localStorage)</strong></td><td>—</td><td>Stockage du token d'authentification côté client</td></tr>
+    <tr><td><strong>Vanilla CSS</strong></td><td>—</td><td>Styles globaux + variables CSS dans index.css</td></tr>
+    <tr><td><strong>Inline Styles JS</strong></td><td>—</td><td>Styles encapsulés dans des objets JavaScript par composant</td></tr>
+  </table>
+
+  <!-- ===================== 4. AUTHENTIFICATION ===================== -->
+  <h1 class="section-title section-break">4. Système d'authentification (AuthContext)</h1>
+
+  <p style="margin-bottom:14px; color:#374151;">
+    L'authentification est gérée via un <strong>React Context</strong> (<code>AuthContext.jsx</code>) qui partage les informations de l'utilisateur connecté à travers toute l'application.
+  </p>
+
+  <h2 class="sub-title">⚙️ Fonctionnement</h2>
+
+  <div class="flow">
+    <div class="flow-step">Saisie credentials</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Appel POST /api/auth/login</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Réception JWT + profil</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Stockage localStorage</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">setUser() → redirect</div>
+  </div>
+
+  <table>
+    <tr><th>Élément</th><th>Description</th></tr>
+    <tr><td><code>user</code></td><td>Objet contenant : id, username, role, nom, prénom, token</td></tr>
+    <tr><td><code>loading</code></td><td>true pendant la vérification initiale du localStorage au chargement</td></tr>
+    <tr><td><code>login(username, password)</code></td><td>Appelle l'API, stocke le token JWT et le profil, met à jour le state</td></tr>
+    <tr><td><code>logout()</code></td><td>Vide localStorage, remet user à null → redirection vers /login</td></tr>
+    <tr><td><code>useAuth()</code></td><td>Hook personnalisé — accès rapide au contexte dans n'importe quel composant</td></tr>
+  </table>
+
+  <pre><span class="comment">// Utilisation dans n'importe quel composant :</span>
+<span class="keyword">const</span> { user, login, logout } = <span class="fn">useAuth</span>();
+
+<span class="comment">// Connexion</span>
+<span class="keyword">const</span> data = <span class="keyword">await</span> <span class="fn">login</span>(<span class="string">'admin'</span>, <span class="string">'password'</span>);
+
+<span class="comment">// Vérifier le rôle</span>
+<span class="keyword">if</span> (user?.role === <span class="string">'ADMIN'</span>) { <span class="comment">/* accès admin */</span> }
+
+<span class="comment">// Déconnexion</span>
+<span class="fn">logout</span>(); <span class="fn">navigate</span>(<span class="string">'/login'</span>);</pre>
+
+  <h2 class="sub-title">🔒 Persistance de session</h2>
+  <p style="color:#374151; font-size:12px;">
+    Au chargement de l'application, un <code>useEffect</code> lit <code>localStorage.getItem('token')</code> et <code>localStorage.getItem('user')</code>.
+    Si un token existe, l'utilisateur reste connecté sans avoir à se reconnecter (même après actualisation de la page).
+  </p>
+
+  <!-- ===================== 5. ROUTAGE ===================== -->
+  <h1 class="section-title">5. Routage et protection des routes (App.jsx)</h1>
+
+  <h2 class="sub-title">🗺️ Structure de routage</h2>
+
+  <table>
+    <tr><th>URL</th><th>Page</th><th>Protection</th></tr>
+    <tr><td><code>/login</code></td><td>LoginPage</td><td><span class="badge badge-gray">Publique</span></td></tr>
+    <tr><td><code>/admin/entreprises</code></td><td>EntreprisesPage</td><td><span class="badge badge-orange">Admin</span></td></tr>
+    <tr><td><code>/admin/ag</code></td><td>AGPage</td><td><span class="badge badge-orange">Admin</span></td></tr>
+    <tr><td><code>/admin/guide</code></td><td>GuidePage</td><td><span class="badge badge-orange">Admin</span></td></tr>
+    <tr><td><code>/user/dashboard</code></td><td>DashboardPage</td><td><span class="badge badge-blue">Connecté</span></td></tr>
+    <tr><td><code>/user/ag</code></td><td>AGVotePage</td><td><span class="badge badge-blue">Connecté</span></td></tr>
+    <tr><td><code>/user/votes</code></td><td>MyVotesPage</td><td><span class="badge badge-blue">Connecté</span></td></tr>
+    <tr><td><code>/</code></td><td>Redirection automatique</td><td><span class="badge badge-green">Auto</span></td></tr>
+  </table>
+
+  <h2 class="sub-title">🛡️ Composant PrivateRoute</h2>
+
+  <pre><span class="comment">// Protège une page — redirige si non connecté ou mauvais rôle</span>
+<span class="keyword">function</span> <span class="fn">PrivateRoute</span>({ children, adminOnly }) {
+  <span class="keyword">const</span> { user, loading } = <span class="fn">useAuth</span>();
+
+  <span class="keyword">if</span> (loading) <span class="keyword">return</span> <span class="keyword">null</span>;                         <span class="comment">// Attendre la vérif</span>
+  <span class="keyword">if</span> (!user) <span class="keyword">return</span> &lt;Navigate to=<span class="string">"/login"</span> /&gt;;      <span class="comment">// Non connecté</span>
+  <span class="keyword">if</span> (adminOnly &amp;&amp; user.role !== <span class="string">'ADMIN'</span>)             <span class="comment">// Pas admin</span>
+    <span class="keyword">return</span> &lt;Navigate to=<span class="string">"/user/dashboard"</span> /&gt;;
+
+  <span class="keyword">return</span> children;                                  <span class="comment">// Accès autorisé</span>
+}</pre>
+
+  <!-- ===================== 6. API ===================== -->
+  <h1 class="section-title section-break">6. Couche API — api.js</h1>
+
+  <p style="margin-bottom:14px; color:#374151;">
+    Toutes les communications avec le backend sont centralisées dans <code>src/api/api.js</code>. 
+    Une instance Axios est créée avec la baseURL et un intercepteur ajoute automatiquement le token JWT à chaque requête.
+  </p>
+
+  <pre><span class="comment">// Instance Axios configurée</span>
+<span class="keyword">const</span> api = axios.<span class="fn">create</span>({ baseURL: <span class="string">'http://localhost:8080/api'</span> });
+
+<span class="comment">// Intercepteur : ajoute le token JWT à chaque requête</span>
+api.interceptors.request.<span class="fn">use</span>(config => {
+  <span class="keyword">const</span> token = localStorage.<span class="fn">getItem</span>(<span class="string">'token'</span>);
+  <span class="keyword">if</span> (token) config.headers.Authorization = <span class="string">`Bearer </span>${token}<span class="string">`</span>;
+  <span class="keyword">return</span> config;
+});
+
+<span class="comment">// Intercepteur : déconnexion automatique si 401 Unauthorized</span>
+api.interceptors.response.<span class="fn">use</span>(
+  response => response,
+  error => {
+    <span class="keyword">if</span> (error.response?.status === <span class="string">401</span>) {
+      localStorage.<span class="fn">clear</span>();
+      window.location.href = <span class="string">'/login'</span>;
+    }
+    <span class="keyword">return</span> Promise.<span class="fn">reject</span>(error);
+  }
+);</pre>
+
+  <h2 class="sub-title">📋 Fonctions disponibles</h2>
+
+  <table>
+    <tr><th>Fonction</th><th>Méthode HTTP</th><th>Endpoint</th><th>Rôle</th></tr>
+    <tr><td><code>login(data)</code></td><td>POST</td><td>/auth/login</td><td>Connexion utilisateur</td></tr>
+    <tr><td><code>register(data)</code></td><td>POST</td><td>/auth/register</td><td>Inscription</td></tr>
+    <tr><td><code>getEntreprises()</code></td><td>GET</td><td>/admin/entreprises</td><td>Liste entreprises</td></tr>
+    <tr><td><code>createEntreprise(dto)</code></td><td>POST</td><td>/admin/entreprises</td><td>Créer entreprise</td></tr>
+    <tr><td><code>updateEntreprise(id,dto)</code></td><td>PUT</td><td>/admin/entreprises/{id}</td><td>Modifier</td></tr>
+    <tr><td><code>deleteEntreprise(id)</code></td><td>DELETE</td><td>/admin/entreprises/{id}</td><td>Supprimer</td></tr>
+    <tr><td><code>getActionnaires()</code></td><td>GET</td><td>/admin/actionnaires</td><td>Liste actionnaires</td></tr>
+    <tr><td><code>createActionnaire(dto)</code></td><td>POST</td><td>/admin/actionnaires</td><td>Créer actionnaire</td></tr>
+    <tr><td><code>getResolutions()</code></td><td>GET</td><td>/admin/resolutions</td><td>Liste résolutions</td></tr>
+    <tr><td><code>createResolution(dto)</code></td><td>POST</td><td>/admin/resolutions</td><td>Créer résolution</td></tr>
+    <tr><td><code>getAGs()</code></td><td>GET</td><td>/admin/ag</td><td>Liste AGs (admin)</td></tr>
+    <tr><td><code>createAG(dto)</code></td><td>POST</td><td>/admin/ag</td><td>Créer AG</td></tr>
+    <tr><td><code>updateAG(id,dto)</code></td><td>PUT</td><td>/admin/ag/{id}</td><td>Modifier AG</td></tr>
+    <tr><td><code>deleteAG(id)</code></td><td>DELETE</td><td>/admin/ag/{id}</td><td>Supprimer AG</td></tr>
+    <tr><td><code>getUserAGs()</code></td><td>GET</td><td>/user/ags</td><td>AGs de l'actionnaire connecté</td></tr>
+    <tr><td><code>vote(data)</code></td><td>POST</td><td>/user/vote</td><td>Exprimer un vote</td></tr>
+    <tr><td><code>getMyVotes()</code></td><td>GET</td><td>/user/votes</td><td>Historique mes votes</td></tr>
+  </table>
+
+  <!-- ===================== 7. PAGES ADMIN ===================== -->
+  <h1 class="section-title section-break">7. Pages Administrateur</h1>
+
+  <h2 class="sub-title">🏢 EntreprisesPage.jsx</h2>
+  <p style="margin-bottom:10px;color:#374151;">Gestion CRUD des entreprises (nom, secteur, description, logo).</p>
+  <table>
+    <tr><th>État (useState)</th><th>Type</th><th>Rôle</th></tr>
+    <tr><td><code>entreprises</code></td><td>Array</td><td>Liste des entreprises du backend</td></tr>
+    <tr><td><code>formulaireOuvert</code></td><td>Boolean</td><td>Afficher/masquer le modal de création</td></tr>
+    <tr><td><code>entrepriseSelectionnee</code></td><td>Object|null</td><td>Entreprise en cours de modification</td></tr>
+    <tr><td><code>chargement</code></td><td>Boolean</td><td>État du chargement initial</td></tr>
+  </table>
+  <div class="highlight">
+    💡 La <strong>recherche par filtrage</strong> est côté client — la liste complète est chargée une fois, puis filtrée avec <code>Array.filter()</code> sur les changements de l'input.
+  </div>
+
+  <h2 class="sub-title">🗳️ AGPage.jsx — Wizard 3 étapes</h2>
+  <p style="margin-bottom:10px;color:#374151;">Page principale de l'admin. La création d'une AG est guidée par une barre d'étapes :</p>
+
+  <div class="flow" style="margin-bottom:16px;">
+    <div class="flow-step">Étape 1 — Infos AG</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Étape 2 — Actionnaires</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Étape 3 — Résolutions</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">✅ Créer l'AG</div>
+  </div>
+
+  <table>
+    <tr><th>Composant</th><th>Responsabilité</th></tr>
+    <tr><td><code>BarreEtapes</code></td><td>Affiche les 3 étapes avec indicateur de progression (vert = fait, gris = à venir)</td></tr>
+    <tr><td><code>Etape1InfosAG</code></td><td>Formulaire : Titre*, Entreprise*, Date, Lieu, Description</td></tr>
+    <tr><td><code>Etape2Actionnaires</code></td><td>Liste actionnaires, cases à cocher "présents", ajout rapide d'actionnaire</td></tr>
+    <tr><td><code>Etape3Resolutions</code></td><td>Sélection des résolutions à voter, création rapide de nouvelles résolutions</td></tr>
+    <tr><td><code>AGPage</code> (principal)</td><td>Orchestre la navigation, charge les données, appelle createAG()/updateAG()</td></tr>
+  </table>
+
+  <h3 class="item-title">État global de AGPage :</h3>
+  <table>
+    <tr><th>Variable</th><th>Rôle</th></tr>
+    <tr><td><code>formData</code></td><td>Objet avec tous les champs : titre, entrepriseId, date, lieu, description, resolutionIds[], actionnairesPresentsIds[]</td></tr>
+    <tr><td><code>etapeActuelle</code></td><td>Index 0, 1 ou 2 — détermine quelle étape est affichée</td></tr>
+    <tr><td><code>listeAGs</code></td><td>Tableau des AGs existantes (affiché en bas de page)</td></tr>
+    <tr><td><code>estModification</code></td><td>true = mode édition, false = mode création</td></tr>
+  </table>
+
+  <!-- ===================== 8. PAGES UTILISATEUR ===================== -->
+  <h1 class="section-title section-break">8. Pages Utilisateur / Actionnaire</h1>
+
+  <h2 class="sub-title">🏠 DashboardPage.jsx</h2>
+  <p style="margin-bottom:10px; color:#374151;">
+    Tableau de bord de l'actionnaire. Charge les AGs via <code>getUserAGs()</code> et les sépare automatiquement en deux groupes :
+  </p>
+  <table>
+    <tr><th>Groupe</th><th>Critère</th><th>Affichage</th></tr>
+    <tr><td>AGs à venir</td><td><code>new Date(ag.date) &gt;= new Date()</code></td><td>Badge vert "À venir"</td></tr>
+    <tr><td>AGs passées</td><td><code>new Date(ag.date) &lt; new Date()</code></td><td>Badge gris "Passée"</td></tr>
+  </table>
+  <p style="margin-top:10px;color:#374151;font-size:12px;">
+    4 cartes de statistiques : Total AGs, À venir, Résolutions totales, Passées. Clic sur une carte AG → navigation vers <code>/user/ag</code>.
+  </p>
+
+  <h2 class="sub-title">🗳️ AGVotePage.jsx</h2>
+  <p style="margin-bottom:10px;color:#374151;">
+    Page de vote interactive. Charge en parallèle (<code>Promise.all</code>) les AGs et les votes existants de l'utilisateur.
+  </p>
+  <table>
+    <tr><th>Fonctionnalité</th><th>Implémentation</th></tr>
+    <tr><td>Affichage accordéon</td><td>Clic sur l'en-tête d'une AG → toggle <code>agOuverte === ag.id</code></td></tr>
+    <tr><td>Vote POUR / CONTRE / ABSTENTION</td><td>Boutons colorés → appel <code>vote({resolutionId, choix})</code></td></tr>
+    <tr><td>Vote déjà exprimé</td><td>Bouton sélectionné en couleur (vert/rouge/gris) selon <code>monVotePour(res.id)</code></td></tr>
+    <tr><td>Compteur avancement</td><td>"2/3 votés" — calculé en temps réel depuis le state local</td></tr>
+    <tr><td>Feedback utilisateur</td><td>Message toast vert (succès) ou rouge (erreur) pendant 3 secondes</td></tr>
+  </table>
+
+  <h2 class="sub-title">✅ MyVotesPage.jsx</h2>
+  <p style="margin-bottom:10px;color:#374151;">
+    Historique de tous les votes exprimés. Charge <code>getMyVotes()</code> et calcule :
+  </p>
+  <table>
+    <tr><th>Statistique</th><th>Calcul</th></tr>
+    <tr><td>Votes POUR</td><td><code>votes.filter(v =&gt; v.choix === 'POUR').length</code></td></tr>
+    <tr><td>Votes CONTRE</td><td><code>votes.filter(v =&gt; v.choix === 'CONTRE').length</code></td></tr>
+    <tr><td>Votes NEUTRES</td><td><code>votes.filter(v =&gt; v.choix === 'NEUTRE').length</code></td></tr>
+  </table>
+  <p style="margin-top:10px;color:#374151;font-size:12px;">
+    Le composant <strong>BadgeVote</strong> affiche un badge coloré (vert/rouge/gris) selon le choix. Le tableau liste : résolution, mon choix, poids (nombre d'actions).
+  </p>
+
+  <!-- ===================== 9. COMPOSANTS ===================== -->
+  <h1 class="section-title section-break">9. Composants partagés</h1>
+
+  <h2 class="sub-title">📌 Sidebar.jsx</h2>
+  <p style="margin-bottom:10px;color:#374151;">
+    Navigation latérale fixe. Adapte ses liens selon le rôle de l'utilisateur connecté :
+  </p>
+  <table>
+    <tr><th>Rôle</th><th>Liens affichés</th></tr>
+    <tr><td><span class="badge badge-orange">ADMIN</span></td><td>🏢 Entreprises → 🗳️ Assemblées Générales → 📖 Guide</td></tr>
+    <tr><td><span class="badge badge-blue">USER</span></td><td>🏠 Tableau de bord → 🗳️ Mes Assemblées &amp; Votes → ✅ Mes Votes → 📖 Guide</td></tr>
+  </table>
+  <p style="margin-top:10px;color:#374151;font-size:12px;">
+    Utilise <code>NavLink</code> de React Router pour surligner automatiquement le lien de la page active. Bouton "Se déconnecter" en bas : appelle <code>logout()</code> + <code>navigate('/login')</code>.
+  </p>
+
+  <h2 class="sub-title">🔐 LoginPage.jsx</h2>
+  <p style="margin-bottom:10px;color:#374151;">
+    Page de connexion ET d'inscription dans un seul composant. Deux onglets (Connexion / Inscription) contrôlés par <code>mode</code> (useState).
+  </p>
+  <table>
+    <tr><th>Mode Connexion</th><th>Mode Inscription</th></tr>
+    <tr><td>username + password → login() → redirect selon rôle</td><td>nom, prénom, email, username, password → register() → login auto</td></tr>
+  </table>
+
+  <!-- ===================== 10. FLUX ===================== -->
+  <h1 class="section-title section-break">10. Flux complets</h1>
+
+  <h2 class="sub-title">🔑 Flux de connexion</h2>
+  <div class="flow">
+    <div class="flow-step">LoginPage</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">AuthContext.login()</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">POST /api/auth/login</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">token + user dans LS</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Redirect /admin ou /user</div>
+  </div>
+
+  <h2 class="sub-title" style="margin-top:24px;">🗳️ Flux de vote</h2>
+  <div class="flow">
+    <div class="flow-step">AGVotePage charge</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">getUserAGs() + getMyVotes()</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Affiche accordéon</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Clic bouton vote</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">POST /user/vote</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Mise à jour state local</div>
+  </div>
+
+  <h2 class="sub-title" style="margin-top:24px;">➕ Flux de création d'AG</h2>
+  <div class="flow">
+    <div class="flow-step">Étape 1 : Infos</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Étape 2 : Actionnaires</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Étape 3 : Résolutions</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Clic "Créer l'AG"</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">POST /api/admin/ag</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Rechargement liste</div>
+  </div>
+
+  <hr class="divider">
+  <p style="text-align:center; color:#9ca3af; font-size:11px; padding-bottom:20px;">
+    Documentation Frontend — Système de Vote AG — Soutenance de projet
+  </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# ============================================================
+# .gitignore — Fichiers à NE PAS envoyer sur GitHub
+# ============================================================
+
+# --- Frontend React ---
+ag-frontend/node_modules/
+ag-frontend/dist/
+ag-frontend/.env
+ag-frontend/.env.local
+
+# --- Backend Spring Boot ---
+ag-backend/target/
+ag-backend/.mvn/
+ag-backend/*.log
+
+# --- IDE / Éditeurs ---
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --- Système ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Fichiers uploadés ---
+ag-backend/uploads/
